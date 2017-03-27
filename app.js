@@ -62,4 +62,5 @@ Rx.Observable.combineLatest(
   input$,
   (timer, input) => ({count: timer.count, text: input})
   )
+  .filter((data) => data.count === parseInt(data.text))
   .subscribe(x => console.log(x));
