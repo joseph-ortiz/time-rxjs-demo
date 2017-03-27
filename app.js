@@ -29,15 +29,30 @@ const incOrReset$ = Rx.Observable.merge(
   reset$.mapTo(reset)
 );
 
-Rx.Observable.merge(
+const starters$ = Rx.Observable.merge(
   start$.mapTo(1000),
   half$.mapTo(500),
   quarter$.mapTo(250)
-).switchMap((time) => Rx.Observable.merge(
+);
+
+const intervalActions$ = (time) => Rx.Observable.merge(
   Rx.Observable.interval(time)
-    .takeUntil(stop$).mapTo(inc),
+    .takeUntil(stop$)
+    .mapTo(inc),
   reset$.mapTo(reset)
-))
+);
+
+const timer$ = starters$
+  .switchMap(intervalActions$)
   .startWith(data)
-  .scan((acc, curr) => curr(acc))
+  .scan((acc, curr) => curr(acc));
+timer$  
   .subscribe(setHtml);
+
+
+const inputButton = document.querySelector('input');
+const input$ = Rx.Observable.fromEvent(inputButton, 'input')
+  .map(event => event.target.value);
+
+input$
+  .subscribe(x => console.log(x));
