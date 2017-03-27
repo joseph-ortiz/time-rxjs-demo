@@ -61,6 +61,7 @@ Rx.Observable.combineLatest(
   input$,
   (timer, input) => ({count: timer.count, text: input})
   )
+  .do((x) => console.log('do', x))
   .takeWhile((data) => data.count <= 5)
   .filter((data) => data.count === parseInt(data.text))
   .reduce((acc, curr) => {
