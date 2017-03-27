@@ -46,13 +46,20 @@ const timer$ = starters$
   .switchMap(intervalActions$)
   .startWith(data)
   .scan((acc, curr) => curr(acc));
-timer$  
-  .subscribe(setHtml);
+
 
 
 const inputButton = document.querySelector('input');
 const input$ = Rx.Observable.fromEvent(inputButton, 'input')
   .map(event => event.target.value);
 
-input$
+timer$  
+  .subscribe(setHtml);
+//input$.subscribe(x => console.log(x));
+
+Rx.Observable.combineLatest(
+  timer$,
+  input$,
+  (timer, input) => ({count: timer.count, text: input})
+  )
   .subscribe(x => console.log(x));
