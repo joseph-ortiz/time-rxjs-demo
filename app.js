@@ -56,13 +56,13 @@ const input$ = Rx.Observable.fromEvent(inputButton, 'input')
 timer$  
   .subscribe(setHtml);
 
-Rx.Observable.combineLatest(
-  timer$,
-  input$,
-  (timer, input) => ({count: timer.count, text: input})
-  )
+timer$
   .do((x) => console.log('do', x))
   .takeWhile((data) => data.count <= 5)
+  .withLatestFrom(
+    input$,
+    (timer, input) => ({count: timer.count, text: input})
+  )
   .filter((data) => data.count === parseInt(data.text))
   .reduce((acc, curr) => {
     return acc + 1;
