@@ -57,18 +57,17 @@ timer$
   .subscribe(setHtml);
 
 timer$
-  .do((x) => console.log('do', x))
-  .takeWhile((data) => data.count <= 5)
+  .takeWhile((data) => data.count <= 3)
   .withLatestFrom(
     input$,
     (timer, input) => ({count: timer.count, text: input})
   )
+  .do((x) => console.log('do', x))
   .filter((data) => data.count === parseInt(data.text))
-  .reduce((acc, curr) => {
-    return acc + 1;
-  }, 0)
+  .reduce((acc, curr)=> acc + 1, 0)
+  .repeat()
   .subscribe(
-    x   => console.log('sub', x),
+    score   => console.log('Score', score),
     err => console.log(err),
     x   => console.log('completed'),
     );
